@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "kind": "web_scan",
+      "ip": "198.51.100.23",
+      "evidence": "6 sensitive paths probed"
+    },
+    {
+      "kind": "webshell",
+      "ip": "10.20.1.51",
+      "evidence": "upload then cmd= execution under /uploads/"
+    },
+    {
+      "kind": "privilege_escalation",
+      "user": "web",
+      "evidence": "普通账号 sudo 起 shell 后立刻以 root 登录"
+    }
+  ],
+  "note": "benign look-alikes are intentionally unlabelled"
+}

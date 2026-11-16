@@ -16,10 +16,16 @@ python -m pytest tests -q
 python detector/detector.py logs/auth.log findings.json
 ```
 
-## 基线状态
+## 检测器
 
-`detector/detector.py` 对每条失败登录和每个请求各产出一条告警，不做任何关联：
-不看失败之后有没有成功登录，不看同账号是否跨主机，也不看请求路径是否敏感。
+`detector/detector.py` 做事件关联，输出 `findings.json`（findings + needs_review）：
+
+- `archive_webshell`：上传端点/压缩包请求 → 同 IP 在 1 小时内访问解压目录下的可执行文件（.php/.jsp/.exe 等），告警带 upload → extract → access 时间序列；
+- `web_scan`：同一 IP 探测 ≥4 个不同敏感路径（少量被拒探测属背景噪声，不报）；
+- `privilege_escalation`：普通账号 sudo 起 root shell 后 10 分钟内出现 root SSH 登录。
+
+链路不完整的（只有上传没有访问、只有可执行文件访问没有上传记录、sudo 后无 root 登录）
+进 `needs_review` 并注明缺哪一环，不算告警。
 
 ## 标注事件
 
